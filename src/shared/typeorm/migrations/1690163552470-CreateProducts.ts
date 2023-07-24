@@ -47,3 +47,5 @@ export class CreateProducts1690163552470 implements MigrationInterface {
         await queryRunner.dropTable('products');
     }
 }
+
+//Arquivo gerado através de "yarn typeorm migration:create -n <Nome_do_Arquivo_sem_numeros>"

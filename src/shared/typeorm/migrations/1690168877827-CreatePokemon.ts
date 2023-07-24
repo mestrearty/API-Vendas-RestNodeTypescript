@@ -50,3 +50,5 @@ export class CreatePokemon1690168877827 implements MigrationInterface {
         await queryRunner.dropTable('pokemon');
     }
 }
+
+//Arquivo gerado através de "yarn typeorm migration:create -n <Nome_do_Arquivo_sem_numeros>"
