@@ -6,16 +6,19 @@ import { errors } from 'celebrate';
 import routes from './routes';
 import AppError from '@shared/errors/AppError';
 import '@shared/typeorm';
+import uploadConfig from '@config/upload';
+
 
 const app = express();
 const port = 9000;
 
 app.use(cors());
 app.use(express.json());
+app.use('/files', express.static(uploadConfig.directory)); //Rota para front-end consumir imagens dee avatar do usuário
 
 //middlewares
 app.use(routes); //gerenciador de rotas
-app.use(errors()) // validador de erros pelo celebrate
+app.use(errors()); // validador de erros pelo celebrate
 
 //Esposta em caso de erro de requisição
 app.use((error: Error, request: Request, response: Response, next: NextFunction) => {
