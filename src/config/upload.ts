@@ -12,9 +12,8 @@ export default {
         destination: uploadFolder,
         filename(request, file, callback) {
             const fileHash = crypto.randomBytes(10).toString('hex');
-            const dateTimeStamp = new Date();
-
-            const filename = `${file}-${dateTimeStamp}-${file.originalname}`;
+      
+            const filename = `${file}-${file.originalname}`;
 
             callback(null, filename);
         }

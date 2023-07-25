@@ -2,10 +2,16 @@ import UsersController from "@modules/users/controllers/UsersController";
 import { Router } from "express";
 import { celebrate, Joi, Segments } from 'celebrate';
 import isAuthenticated from "@shared/http/middlewares/isAuthenticated";
+import multer from "multer";
+import uploadConfig from '@config/upload';
+import UserAvatarController from "@modules/users/controllers/UserAvatarController";
+
 
 const usersRouter = Router();
 const usersController = new UsersController();
+const usersAvatarController = new UserAvatarController();
 
+const upload = multer(uploadConfig);
 
 usersRouter.get('/', isAuthenticated, usersController.index);
 
@@ -31,6 +37,8 @@ usersRouter.put('/:id', celebrate({
 
 usersRouter.delete('/:id', celebrate({ [Segments.PARAMS]: { id: Joi.string().uuid().required() } }),
     usersController.delete);
+
+usersRouter.patch('/avatar', isAuthenticated, upload.single('avatar'), usersAvatarController.uptade);
 
 
 export default usersRouter;
