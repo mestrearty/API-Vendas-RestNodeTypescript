@@ -8,9 +8,9 @@ class ListUserService {
     public async execute(): Promise<User[]> {
         const usersRepository = getCustomRepository(UsersRepository);
 
-        const products = usersRepository.find(); //preparando objeto para o banco de dados
+        const users = usersRepository.find(); //preparando objeto para o banco de dados
 
-        return products;
+        return users;
     }
 }
 

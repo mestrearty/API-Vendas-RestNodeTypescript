@@ -8,9 +8,9 @@ const usersController = new UsersController();
 
 usersRouter.get('/', usersController.index);
 
-// usersRouter.get('/:id',
-//     celebrate({ [Segments.PARAMS]: { id: Joi.string().uuid().required() } }),
-//     usersController.show);
+usersRouter.get('/:id',
+    celebrate({ [Segments.PARAMS]: { id: Joi.string().uuid().required() } }),
+    usersController.show);
 
 usersRouter.post('/', celebrate({
     [Segments.BODY]: {
@@ -20,16 +20,16 @@ usersRouter.post('/', celebrate({
     }
 }), usersController.create);
 
-// usersRouter.put('/:id', celebrate({
-//     [Segments.BODY]: {
-//         name: Joi.string(),
-//         price: Joi.number().precision(2),
-//         quantity: Joi.number()
-//     }
-// }), usersController.uptade);
+usersRouter.put('/:id', celebrate({
+    [Segments.BODY]: {
+        name: Joi.string(),
+        email: Joi.string(),
+        password: Joi.string()
+    }
+}), usersController.uptade);
 
-// usersRouter.delete('/:id', celebrate({ [Segments.PARAMS]: { id: Joi.string().uuid().required() } }),
-//     usersController.delete);
+usersRouter.delete('/:id', celebrate({ [Segments.PARAMS]: { id: Joi.string().uuid().required() } }),
+    usersController.delete);
 
 
 export default usersRouter;
