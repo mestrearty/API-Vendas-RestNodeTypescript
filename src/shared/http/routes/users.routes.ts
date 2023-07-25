@@ -1,12 +1,13 @@
 import UsersController from "@modules/users/controllers/UsersController";
 import { Router } from "express";
 import { celebrate, Joi, Segments } from 'celebrate';
+import isAuthenticated from "@modules/users/middlewares/isAuthenticated";
 
 const usersRouter = Router();
 const usersController = new UsersController();
 
 
-usersRouter.get('/', usersController.index);
+usersRouter.get('/', isAuthenticated, usersController.index);
 
 usersRouter.get('/:id',
     celebrate({ [Segments.PARAMS]: { id: Joi.string().uuid().required() } }),
