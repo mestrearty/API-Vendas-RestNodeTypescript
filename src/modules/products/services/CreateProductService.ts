@@ -1,5 +1,5 @@
 import { getCustomRepository } from "typeorm";
-import { ProductRepository } from "../typeorm/repositories/ProcductsRepository";
+import { ProductsRepository } from "../typeorm/repositories/ProcductsRepository";
 import AppError from "@shared/errors/AppError";
 import Product from "../typeorm/entities/product";
 
@@ -10,7 +10,7 @@ interface IRequest {
 }
 class CreateProductService {
     public async execute({ name, price, quantity }: IRequest): Promise<Product> {
-        const productsRepository = getCustomRepository(ProductRepository);
+        const productsRepository = getCustomRepository(ProductsRepository);
         const producExists = await productsRepository.findByName(name);
 
         if (producExists) throw new AppError('Já existe um produto cadastrado com esse nome');
