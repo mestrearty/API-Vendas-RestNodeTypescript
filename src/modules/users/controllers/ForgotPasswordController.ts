@@ -5,10 +5,10 @@ export default class ForgotPasswordController {
     public async create(request: Request, response: Response): Promise<Response> {
         const { email } = request.body;
         const sendForgotPasswordEmailService = new SendForgotPasswordEmailService();
-        await sendForgotPasswordEmailService.execute({
+        const token = await sendForgotPasswordEmailService.execute({
             email
         });
-        return response.status(204).json();
+        return response.status(200).json(token);
     }
 
 }
