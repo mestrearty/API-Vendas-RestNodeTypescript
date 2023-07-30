@@ -13,8 +13,6 @@ productsRouter.get('/:id',
     productsController.show);
 
 productsRouter.post('/', celebrate({
-    [Segments.PARAMS]: { id: Joi.string().uuid().required() }
-    ,
     [Segments.BODY]: {
         name: Joi.string().required(),
         price: Joi.number().precision(2).required(),

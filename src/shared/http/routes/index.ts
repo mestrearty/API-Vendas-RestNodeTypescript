@@ -5,6 +5,7 @@ import sessionsRouter from "./sessions.routes";
 import passwordRouter from "./password.routes";
 import profileRouter from "./profile.routes";
 import customersRouter from "./customers.routes";
+import ordersRouter from "./orders.routes";
 
 const routes = Router();
 
@@ -14,6 +15,7 @@ routes.use('/sessions', sessionsRouter);
 routes.use('/password', passwordRouter);
 routes.use(`/profile`, profileRouter);
 routes.use(`/customers`, customersRouter);
+routes.use(`/orders`, ordersRouter);
 
 routes.get(`/`, (request, response) => {
     return response.json({ mensage: "Pokémon topster" });
