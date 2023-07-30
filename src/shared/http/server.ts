@@ -1,4 +1,5 @@
 import 'reflect-metadata';
+import 'dotenv/config';
 import express, { Response, Request, NextFunction } from 'express';
 import 'express-async-errors';
 import cors from 'cors';
@@ -10,7 +11,7 @@ import uploadConfig from '@config/upload';
 
 
 const app = express();
-const port = 9000;
+const port = process.env.SERVER_PORT;
 
 app.use(cors());
 app.use(express.json());
