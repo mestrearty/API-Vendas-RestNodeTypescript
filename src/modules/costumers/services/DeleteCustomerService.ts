@@ -13,7 +13,7 @@ class DeleteCustomerService {
         const customer = await customersRepository.findById(id);
 
         if (!customer) {
-            throw new AppError('Customer not found.');
+            throw new AppError('Cliente não encontrado.');
         }
 
         await customersRepository.remove(customer);

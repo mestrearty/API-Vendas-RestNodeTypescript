@@ -7,7 +7,7 @@ class ListCustomerService {
     public async execute(): Promise<Customer[]> {
         const customerRepository = getCustomRepository(CustomersRepository);
 
-        const customer = customerRepository.find(); //preparando objeto para o banco de dados
+        const customer = customerRepository.find(); 
 
         return customer;
     }
