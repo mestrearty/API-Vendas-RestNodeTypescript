@@ -16,8 +16,8 @@ class UpdateUserService {
         const user = await usersRepository.findOne(id); //procurando o produto no banco
         if (!user) throw new AppError('Produto não encontrado'); //verifica se há o produto
 
-        const producExists = await usersRepository.findByName(name);//procurando se existe algum produto no banco com o nome que está querendo salvar
-        if (producExists && name != user.name) throw new AppError('Já existe um produto cadastrado com esse nome');
+        const userExists = await usersRepository.findByName(name);//procurando se existe algum produto no banco com o nome que está querendo salvar
+        if (userExists && name != user.name) throw new AppError('Já existe um produto cadastrado com esse nome');
 
         user.name = name;
         user.email = email;
