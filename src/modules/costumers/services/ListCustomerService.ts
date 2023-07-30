@@ -7,7 +7,7 @@ class ListCustomerService {
     public async execute(): Promise<Customer[]> {
         const customerRepository = getCustomRepository(CustomersRepository);
 
-        const customer = customerRepository.find(); 
+        const customer = await customerRepository.find(); 
 
         return customer;
     }
