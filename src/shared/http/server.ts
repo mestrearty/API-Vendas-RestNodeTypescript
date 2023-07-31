@@ -8,6 +8,7 @@ import routes from './routes';
 import AppError from '@shared/errors/AppError';
 import '@shared/typeorm';
 import uploadConfig from '@config/upload';
+import rateLimiter from '@shared/http/middlewares/rateLimiter';
 
 
 const app = express();
@@ -18,6 +19,7 @@ app.use(express.json());
 app.use('/files', express.static(uploadConfig.directory)); //Rota para front-end consumir imagens dee avatar do usuário
 
 //middlewares
+app.use(rateLimiter);
 app.use(routes); //gerenciador de rotas
 app.use(errors()); // validador de erros pelo celebrate
 
