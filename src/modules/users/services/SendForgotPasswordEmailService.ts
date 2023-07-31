@@ -1,44 +1,63 @@
-import { getCustomRepository } from "typeorm";
-import AppError from "@shared/errors/AppError";
-import UsersRepository from "../typeorm/repositories/UsersRepository";
-import UserTokensRepository from '../typeorm/repositories/UserTokensRepository';
-import UserToken from "../typeorm/entities/UserToken";
-import EtherealMail from "@config/mail/EtherealMail";
+import AppError from '@shared/errors/AppError';
+import { getCustomRepository } from 'typeorm';
 import path from 'path';
+import UsersRepository from '../typeorm/repositories/UsersRepository';
+import UserTokensRepository from '../typeorm/repositories/UserTokensRepository';
+import EtherealMail from '@config/mail/EtherealMail';
+import SESMail from '@config/mail/SESMail';
+import mailConfig from '@config/mail/mail';
 
 interface IRequest {
     email: string;
 }
 class SendForgotPasswordEmailService {
-    public async execute({ email }: IRequest): Promise<UserToken | undefined> {
+    public async execute({ email }: IRequest): Promise<void> {
         const usersRepository = getCustomRepository(UsersRepository);
         const userTokensRepository = getCustomRepository(UserTokensRepository);
-
         const user = await usersRepository.findByEmail(email);
-        if (!user) throw new AppError('Não há cadastros com e-mail informado');
+        if (!user) {
+            throw new AppError('Usuário não encontrado');
+        }
+        const { token } = await userTokensRepository.generate(user.id);
+        const forgotPasswordTemplate = path.resolve(
+            __dirname,
+            '..',
+            'views',
+            'forgot_password.hbs',
+        );
 
-        const userToken = await userTokensRepository.generate(user.id);
-
-        const forgotPasswordTemplate = path.resolve(__dirname, '..', 'views', 'forgot_password.hbs',);
+        if (mailConfig.driver === 'ses') {
+            await SESMail.sendMail({
+                to: {
+                    name: user.name,
+                    email: user.email,
+                },
+                subject: '[API Vendas] Recuperação de Senha',
+                templateData: {
+                    file: forgotPasswordTemplate,
+                    variables: {
+                        name: user.name,
+                        link: `${process.env.APP_WEB_URL}/reset_password?token=${token}`,
+                    },
+                },
+            });
+            return;
+        }
 
         await EtherealMail.sendMail({
             to: {
                 name: user.name,
-                email: user.email
+                email: user.email,
             },
-            subject: 'Repuceração de senha - API Vendas',
+            subject: '[API Vendas] Recuperação de Senha',
             templateData: {
                 file: forgotPasswordTemplate,
                 variables: {
                     name: user.name,
-                    token: `${userToken.token}`,
-                    link: `${process.env.APP_WEB_URL}/rest_password?token=${userToken.token}`
-                }
-            }
+                    link: `${process.env.APP_WEB_URL}/reset_password?token=${token}`,
+                },
+            },
         });
-
-        return userToken;
     }
 }
-
 export default SendForgotPasswordEmailService;
