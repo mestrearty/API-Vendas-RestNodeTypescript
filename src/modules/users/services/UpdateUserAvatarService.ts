@@ -1,10 +1,10 @@
-import { getCustomRepository } from "typeorm";
-import AppError from "@shared/errors/AppError";
-import UsersRepository from "../typeorm/repositories/UsersRepository";
-import User from "../typeorm/entities/User";
-import path from "path";
+import AppError from '@shared/errors/AppError';
+import { getCustomRepository } from 'typeorm';
+import User from '../typeorm/entities/User';
+import UsersRepository from '../typeorm/repositories/UsersRepository';
 import uploadConfig from '@config/upload';
-import fs from 'fs';
+import DiskStorageProvider from '@shared/providers/StorageProvider/DiskStorageProvider';
+import S3StorageProvider from '@shared/providers/StorageProvider/S3StorageProvider';
 
 interface IRequest {
     user_id: string;
@@ -14,17 +14,29 @@ interface IRequest {
 class UpdateUserAvatarService {
     public async execute({ user_id, avatarFilename }: IRequest): Promise<User> {
         const usersRepository = getCustomRepository(UsersRepository);
+
         const user = await usersRepository.findById(user_id);
 
-        if (!user) throw new AppError('Usuário não encontrado');
-        if (user.avatar) {
-            const userAvatarFilePath = path.join(uploadConfig.directory, user.avatar); //monta o caminho de armazenamento do avatar
-
-            const userAvatarFileExists = await fs.promises.stat(userAvatarFilePath);// verifica se já tem um arquivo
-            if (userAvatarFileExists) await fs.promises.unlink(userAvatarFilePath);// remove o arquivo se já existir um
+        if (!user) {
+            throw new AppError('Usuário não encontrado.');
+        }
+        
+        if (uploadConfig.driver === 's3') {
+            const s3Provider = new S3StorageProvider();
+            if (user.avatar) {
+                await s3Provider.deleteFile(user.avatar);
+            }
+            const filename = await s3Provider.saveFile(avatarFilename);
+            user.avatar = filename;
+        } else {
+            const diskProvider = new DiskStorageProvider();
+            if (user.avatar) {
+                await diskProvider.deleteFile(user.avatar);
+            }
+            const filename = await diskProvider.saveFile(avatarFilename);
+            user.avatar = filename;
         }
 
-        user.avatar = avatarFilename;
         await usersRepository.save(user);
 
         return user;
