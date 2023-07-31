@@ -14,7 +14,6 @@ class CreateCustomerService {
         const customersRepository = getCustomRepository(CustomersRepository);
         const emailExists = await customersRepository.findByEmail(email);
 
-        console.log({ emailExists });
         if (emailExists) throw new AppError('Já existe um usuário cadastrado com esse email');
 
         const costumer = customersRepository.create({ name, email }); //preparando objeto para o banco de dados

@@ -6,7 +6,6 @@ export default class UserAvatarController {
 
     public async uptade(request: Request, response: Response): Promise<Response> {
         const updateAvatar = new UpdateUserAvatarService();
-        console.log(request.file)
         const user = updateAvatar.execute(
             {
                 user_id: request.user.id,
