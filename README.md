@@ -8,10 +8,14 @@ Atenção: Tutorial sobre construção. Caso tenha problema em alguma etapa, fav
 
 Certifique-se que tenha o [node](https://nodejs.org/pt-br/download/current) instalado
 Após clonar a aplicação para o seu repositório, instale as dependências:
-```yarn```
+```bash
+$ yarn
+```
 
 Crie um banco de dados Postgres em um docker e execute
-```docker run --name postgres -e POSTGRES_PASSWORD=docker -p 5432:5432 -d postgres```
+```bash
+$ docker run --name postgres -e POSTGRES_PASSWORD=docker -p 5432:5432 -d postgres
+```
 
 Se por um acaso a aplicação não conseguir autenticar com o banco de dados, force a alteração de senha. No docker digite: 
 ```bash
@@ -23,12 +27,19 @@ Insira duas vezes a senha default da aplicação: **123456**
 
 Com um banco de dados Postgres rodando utilize as migrações do TypeORM para criar a database "apivendas" e suas tabelas:
 
+```bash
+$ yarn typeorm:migration run
 ```
-yarn typeorm:migration run
+
+Crie um docker para executar o Redis para que a API trabalhe com Cache
+```bash
+$ docker run --name redis -p 6379:6379 -d -t redis:alpine
 ```
 
 Na pasta raiz inicie a aplicação:
-```yarn dev```
+```bash
+$ yarn dev
+```
 
 ## Testar a API com Postman
 Para poder testar a API você poderá utilizar o Postman, uma ferramenta para simulação de requisições.
