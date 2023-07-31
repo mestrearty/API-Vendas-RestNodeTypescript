@@ -12,7 +12,7 @@ class DeleteUserService {
         const usersRepository = getCustomRepository(UsersRepository);
 
         const user = await usersRepository.findOne(id); //procurando o produto no banco
-        if (!user) throw new AppError('Produto não encontrado');
+        if (!user) throw new AppError('Usuário não encontrado');
 
         await usersRepository.remove(user);
     }

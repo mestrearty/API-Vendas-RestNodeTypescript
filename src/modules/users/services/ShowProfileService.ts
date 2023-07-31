@@ -13,7 +13,7 @@ class ShowProfileService {
 
         const user = await usersRepository.findById(user_id); //preparando objeto para o banco de dados
 
-        if (!user) throw new AppError('User not found');
+        if (!user) throw new AppError('Usuário não encontrado');
 
         return user;
     }

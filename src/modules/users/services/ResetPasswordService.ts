@@ -15,15 +15,15 @@ class ResetPasswordService {
         const userTokensRepository = getCustomRepository(UserTokensRepository);
 
         const userToken = await userTokensRepository.findByToken(token);
-        if (!userToken) throw new AppError('User token does not exists');
+        if (!userToken) throw new AppError('Token de usuário inexistente');
 
         const user = await usersRepository.findById(userToken.user_id);
-        if (!user) throw new AppError('User does not exists');
+        if (!user) throw new AppError('Token de usuário inexistente');
 
         const tokenCreatedAt = userToken.created_at;
         const compareDate = addHours(tokenCreatedAt, 2);//pega a hora atual e soma 2, ex: se for 9h vira 11h
 
-        if (isAfter(Date.now(), compareDate)) throw new AppError('Token has expired'); //se a hora atual for maior que a hora gerada + 2, da erro
+        if (isAfter(Date.now(), compareDate)) throw new AppError('Token expirado'); //se a hora atual for maior que a hora gerada + 2, da erro
 
         user.password = await hash(password, 8);
 

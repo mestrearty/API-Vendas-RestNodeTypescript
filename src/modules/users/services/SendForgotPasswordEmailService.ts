@@ -15,7 +15,7 @@ class SendForgotPasswordEmailService {
         const userTokensRepository = getCustomRepository(UserTokensRepository);
 
         const user = await usersRepository.findByEmail(email);
-        if (!user) throw new AppError('User does not exists with this email');
+        if (!user) throw new AppError('Não há cadastros com e-mail informado');
 
         const userToken = await userTokensRepository.generate(user.id);
 
