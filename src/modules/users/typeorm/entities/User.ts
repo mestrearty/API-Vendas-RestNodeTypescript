@@ -1,5 +1,5 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-
+import { Exclude, Expose } from 'class-transformer';
 @Entity('users')
 class User {
     @PrimaryGeneratedColumn('uuid')
@@ -12,6 +12,7 @@ class User {
     email: string;
 
     @Column()
+    @Exclude()
     password: string;
 
     @Column()
@@ -22,6 +23,15 @@ class User {
 
     @UpdateDateColumn()
     updated_at: Date;
+
+    @Expose({ name: 'avatar_url' })
+    getAvatarUrl(): string | null { //avatar_url ->AvatarUrl (Substitua a primeira letra minuscula por maiuscula e tire os"_" e bote primeira leta maiuscula)
+        if (!this.avatar) {
+            return null;
+        }
+
+        return `${process.env.APP_API_URL}/files/${this.avatar}`;
+    }
 };
 
 export default User;
