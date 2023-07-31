@@ -34,6 +34,7 @@ $ yarn typeorm:migration run
 Crie um docker para executar o Redis para que a API trabalhe com Cache
 ```bash
 $ docker run --name redis -p 6379:6379 -d -t redis:alpine
+$ docker run --name redis-client -v redisinsight:/db -p 8001:8001 -d -t redislabs/redisinsight:latest
 ```
 
 Na pasta raiz inicie a aplicação:
@@ -87,5 +88,14 @@ Lembre-se de sempre utilizar primeiro as rotas "Post" com nomes "Criar" de cada 
 }
 ```
 
+
+### Verificando cache
+Para verificar se o cache está sendo armazenado, pelo terminal acesso o container:
+```bash
+$ docker exec -it redis sh
+$ redis-cli
+$ get api-vendas-PRODUCT_LIST
+```
+Após utilizar um método *get* para retornar uma lista de produtos, você receber de resposta a lista dos produtos armazenados na chache.
 
 Obrigado pela sua atenção e interesse!🦙
