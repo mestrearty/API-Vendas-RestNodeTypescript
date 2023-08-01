@@ -1,7 +1,7 @@
 import { getCustomRepository } from "typeorm";
-import ProductsRepository from "../infra/typeorm/repositories/ProcductsRepository";
+import ProductsRepository from "../typeorm/repositories/ProcductsRepository";
 import AppError from "@shared/errors/AppError";
-import Product from "../infra/typeorm/entities/product";
+import Product from "../typeorm/entities/product";
 import redisCache from '@shared/cache/RedisCache';
 
 interface IRequest {
@@ -19,7 +19,7 @@ class CreateProductService {
         //const redisCache = new RedisCache();
 
         const product = productsRepository.create({ name, price, quantity });
-
+        
         await redisCache.invalidate('api-vendas-PRODUCT_LIST');
 
         await productsRepository.save(product);

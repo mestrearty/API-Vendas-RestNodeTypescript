@@ -1,7 +1,7 @@
 import AppError from '@shared/errors/AppError';
 import { getCustomRepository } from 'typeorm';
-import User from '../infra/typeorm/entities/User';
-import UsersRepository from '../infra/typeorm/repositories/UsersRepository';
+import User from '../typeorm/entities/User';
+import UsersRepository from '../typeorm/repositories/UsersRepository';
 import uploadConfig from '@config/upload';
 import DiskStorageProvider from '@shared/providers/StorageProvider/DiskStorageProvider';
 import S3StorageProvider from '@shared/providers/StorageProvider/S3StorageProvider';
@@ -20,7 +20,7 @@ class UpdateUserAvatarService {
         if (!user) {
             throw new AppError('Usuário não encontrado.');
         }
-
+        
         if (uploadConfig.driver === 's3') {
             const s3Provider = new S3StorageProvider();
             if (user.avatar) {
