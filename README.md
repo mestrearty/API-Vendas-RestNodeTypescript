@@ -28,7 +28,7 @@ Insira duas vezes a senha default da aplicação: **123456**
 Com um banco de dados Postgres rodando utilize as migrações do TypeORM para criar a database "apivendas" e suas tabelas:
 
 ```bash
-$ yarn typeorm:migration run
+$ yarn typeorm migration:run
 ```
 
 Crie um docker para executar o Redis para que a API trabalhe com Cache
